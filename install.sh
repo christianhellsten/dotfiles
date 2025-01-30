@@ -44,7 +44,7 @@ brew install zsh-autosuggestions
 
 # Update .zshrc to include plugins
 echo "Configuring plugins in .zshrc..."
-PLUGINS_LINE="plugins=(git autojump ssh-agent gpg-agent)"
+PLUGINS_LINE="plugins=(git dotenv autojump ssh-agent gpg-agent)"
 
 # Backup existing .zshrc
 if [ -f "$HOME/.zshrc" ]; then
