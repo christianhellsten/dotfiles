@@ -1,0 +1,353 @@
+""""""""""""""""""""""""""""
+" # Tips
+"
+" ## Debug
+"
+" :checkhealth
+" :verbose=9
+"
+" ## Code completion shortcuts
+"
+" ctrl+x+p
+" ctrl+n
+"
+" ## File opener
+"
+" ctrl+p Open file
+"
+" ## Search
+"
+" shift+f
+"
+" :grep <pattern>
+" :grep <c-r><c-w>
+"
+"
+set nocompatible
+" filetype off
+" show line numbers
+set nu
+" no new line at end-of-file!
+set noeol
+
+" Force vim to use python3
+if has('python3')
+endif
+" let g:python2_host_prog = '/opt/homebrew/bin/python2'
+let g:python3_host_prog = '/opt/homebrew/bin/python3'
+" let g:python2_host_prog = '/usr/local/bin/python'
+" let g:python3_host_prog = '/usr/local/bin/python3'
+" let g:ale_linters = {
+"       \  'python': ['ruff'],
+"       \  'css': ['stylelint'],
+"       \  'scss': ['stylelint'],
+"       \}
+" let g:ale_fixers = {
+"       \  'python': ['black', 'ruff'],
+"       \  'javascript': ['prettier'],
+"       \  'css': ['prettier'],
+"       \}
+" let g:ale_fix_on_save = 1
+" CSV plugin does not work
+" let g:polyglot_disabled = ['csv']
+
+" Fix airline-vim performance issues
+set fillchars=diff:·
+" Set split separator
+set fillchars=vert:\│
+
+" NOTE: stupid rule:
+" Remind me to use jk instead of ESC
+"inoremap  :echoe "use jk"
+"inoremap <esc> <nop>
+"inoremap jk <esc>
+
+call plug#begin('~/.vim/plugged')
+
+" Macvim+fzf requires:
+" $ brew install fzf
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'  " fzf, ripgrep, and ag integration
+nnoremap <c-p> :Files<cr>
+Plug 'janko-m/vim-test' " Run your tests at the speed of thought
+nnoremap t<c-n> :TestNearest<cr>
+nnoremap t<c-l> :TestLast<cr>
+nnoremap t<c-f> :TestFile<cr>
+
+Plug 'joshuavial/aider.nvim' " AI coding assistant
+Plug 'tpope/vim-sensible' " Sensible defaults for Vim
+Plug 'nvim-lua/plenary.nvim' " All the lua functions I don't want to write twice
+Plug 'folke/trouble.nvim' " Show me troubles
+Plug 'bronson/vim-trailing-whitespace' " Highlight trailing whitespace
+Plug 'scrooloose/nerdcommenter' " Easy commenting
+Plug 'tpope/vim-fugitive' " Git integration
+" Plug 'nanotech/jellybeans.vim' " Theme
+Plug 'morhetz/gruvbox' "Theme
+Plug 'lsdr/monokai' " Sublimetext's theme
+Plug 'vim-airline/vim-airline' " Status bar
+Plug 'vim-airline/vim-airline-themes' " Status and tab styling
+Plug 'neoclide/coc.nvim', {'branch': 'release'} " Make your Vim/Neovim as smart as VSCode
+Plug 'neoclide/coc-java'
+Plug 'fatih/vim-go' " Go syntax
+Plug 'tpope/vim-endwise' " Add 'end' automatically to Ruby code
+Plug 'ggml-org/llama.vim'
+
+" Disabled plugins
+" Plug 'mileszs/ack.vim' " ag, ripgrep integration no good
+"Plug 'rking/ag.vim' " DEPRECATED: Search plugin using thesilversearcher/ripgrep
+"Plug 'ruby-formatter/rufo-vim'
+"Plug 'kyazdani42/nvim-web-devicons'
+"Plug 'dense-analysis/ale' " Asynchronous Lint Engine
+"Plug 'vim-ruby/vim-ruby' " Ruby syntax highlighting, smart indenting, autocompletion, compiling
+"Plug 'sheerun/vim-polyglot' " A collection of language packs for Vim.
+"Plug 'posva/vim-vue' " Vue.js
+"Plug 'leafgarland/typescript-vim' " TypeScript
+"Plug 'vim-scripts/SQLUtilities' # Does not do what it says
+"Plug 'Valloric/YouCompleteMe' " Code completion. Not working.
+"Plug 'docunext/closetag.vim' " Close HTML and XML tags
+"Plug 'tpope/vim-surround' " Surround text. Doesn't work with ctrlp.
+"Plug 'scrooloose/nerdtree' " File browser
+"Plug 'tpope/vim-haml' " HAML & Sass
+"Plug 'scrooloose/syntastic' " Syntax highlighting (slow bastard)
+"Plug 'rhysd/vim-crystal' " Crystal syntax highlighting
+"Plug 'kien/ctrlp.vim' " File opener
+"Plug 'elixir-lang/vim-elixir' " Elixir syntax
+"Plug 'mxw/vim-jsx' " JSX syntax
+"Plug 'slim-template/vim-slim' " Vim syntax
+"Plug 'leafgarland/typescript-vim' " typescript syntax
+"Plug 'kchmck/vim-coffee-script' " Coffeescript syntax
+
+
+"Plug 'mustache/vim-mustache-handlebars' " Handlebars and mustaches
+
+" Snipmate
+"Plug 'MarcWeber/vim-addon-mw-utils'
+"Plug 'tomtom/tlib_vim'
+"Plug 'garbas/vim-snipmate'
+"Plug 'honza/vim-snippets'
+
+call plug#end()
+
+
+" filetype plugin indent on
+
+let mapleader=","
+
+""""""""""""""""""""""""""""
+
+set termguicolors " true color support required by e.g. gruvbox
+
+colorscheme gruvbox
+set background=dark    " Use dark gruvbox mode
+"colorscheme jellybeans
+"colorscheme molokai
+"colorscheme vibrantink
+
+" Persistent undo will save us one day...
+set undofile
+set undodir=~/.vim/undo/ " NOTE: this directory MUST exist
+set undolevels=1000  " number of changes that can be undone
+set undoreload=10000 " number of lines to save
+
+" Highlight search results
+highlight OverLength ctermbg=red ctermfg=white guibg=#592929
+match OverLength /\%81v.\+/
+
+" Configure ctrl-p
+set wildignore+=*/deps/*,*/priv/*,*/tmp/*,*.so,*.swp,*.zip,*/log/*,*/vendor/bundle/*,*/node_modules/*,*/bower_components/*,*/build/*,*/tmp/*,*/doc/*,*/target/*
+"let g:ctrlp_working_path_mode = 0
+"let g:ctrlp_max_height = 30
+
+" Remove ugly buffer divider
+:set fillchars+=vert:\
+
+" Highlight search matches
+set hlsearch
+
+syntax on             " Enable syntax highlighting
+" filetype on           " Enable filetype detection
+" filetype indent on    " Enable filetype-specific indenting
+filetype plugin on    " Enable filetype-specific plugins
+
+
+" Don't get stuck while scrolling
+set scrolloff=6
+
+" Faster tab switching
+"
+" Tips:
+"
+"   :tabe index.html
+"
+nnoremap tn :tabnew<CR>
+nnoremap td :tabclose<CR>
+" Next tab
+nnoremap <Tab> gt
+" Previous tab
+nnoremap <S-Tab> gT
+" Go to tab by number
+"noremap <leader>1 1gt
+"noremap <leader>2 2gt
+"noremap <leader>3 3gt
+"noremap <leader>4 4gt
+"noremap <leader>5 5gt
+"noremap <leader>6 6gt
+"noremap <leader>7 7gt
+"noremap <leader>8 8gt
+"noremap <leader>9 9gt
+"noremap <leader>0 :tablast<cr>
+"
+" File search using ripgrep and fzf
+function! s:FileSearch(query, ...) abort
+  let l:targets = a:000
+  let l:query = a:query
+  let l:escaped_targets = map(copy(l:targets), 'shellescape(v:val)')
+  let l:cmd = 'rg --column --line-number --no-heading --color=always --smart-case ' . l:query . ' ' . join(l:escaped_targets, ' ')
+
+  " Execute the command and capture output and exit status
+  let l:output = systemlist(l:cmd)
+  let l:status = v:shell_error
+
+  if l:status == 1
+    " If no match was found, display a message
+    echohl WarningMsg
+    echom "No results found for the query: " . l:query . " and cmd: " . l:cmd
+    echohl None
+  elseif l:status == 2
+    " If an error occurred, display an error message with details
+    echohl ErrorMsg
+    if len(l:output) > 0
+      echom "rg error: " . join(l:output, "\n")
+    else
+      echom "rg error: An unspecified error occurred."
+    endif
+    echohl None
+  else
+    " If rg succeeded, call fzf
+    call fzf#vim#grep(l:cmd, 1, fzf#vim#with_preview())
+  endif
+endfunction
+
+" Define a custom command to search file content using ripgrep and fzf with preview
+command! -nargs=+ -complete=file FileSearch call s:FileSearch(<q-args>)
+
+" Map Shift+F to the custom FileSearch command
+nnoremap <S-F> :FileSearch<Space>
+
+" NERDTree = ctrl-n
+"nnoremap <silent> <C-n> :NERDTreeToggle<CR>
+"
+
+" Show 'weird' characters, e.g. encoded space
+set list
+
+" Mouse can interact with tabs, etc
+"set mouse=a
+
+" Allow switching away from unsaved buffer
+set hidden
+
+" No more .swp crap
+set backupdir=/tmp
+
+" Set tab to do omnicompletion.
+" NOTE: Conflicts with snipmate. Do <ctrl-p> instead.
+"function! InsertTabWrapper()
+    "let col = col('.') - 1
+    "if !col || getline('.')[col - 1] !~ '\k'
+        "return "\<tab>"
+    "else
+        "return "\<c-p>"
+    "endif
+"endfunction
+
+"inoremap <tab> <c-r>=InsertTabWrapper()<cr>
+
+" Enable automatic code folding for Ruby
+" NOTE: looks ugly.
+"autocmd FileType ruby,eruby
+      "\ set foldmethod=expr |
+      "\ set foldexpr=getline(v:lnum)=~'^\\s*#'
+      "
+      "
+
+"
+" Copy to OSX clipboard when yanking
+"
+set clipboard=unnamed
+
+" Configure tabs and spaces
+" http://stackoverflow.com/questions/8903103/how-can-i-find-out-why-vim-keeps-changing-my-expandtab-setting
+set tabstop=2
+set softtabstop=2
+set shiftwidth=2
+set expandtab
+
+"
+" ChatGPT
+"
+" let g:chat_gpt_max_tokens=32768
+" let g:chat_gpt_max_tokens=8134
+let g:chat_gpt_model='gpt-4'
+" 32k not available through API yet
+" let g:chat_gpt_model='gpt-4-32k'
+let g:chat_gpt_session_mode=1
+let g:chat_gpt_temperature = 1
+let g:chat_gpt_lang = 'English'
+let g:chat_gpt_split_direction = 'vertical'
+
+
+"
+" Tabs to spaces etc, LOL.
+"
+"autocmd Filetype html setlocal ts=2 sw=2 expandtab
+"autocmd Filetype ruby setlocal ts=2 sw=2 expandtab
+"autocmd Filetype javascript setlocal ts=4 sw=4 sts=0 noexpandtab
+"
+"
+"
+
+"lua << EOF
+"  require("trouble").setup {
+"    -- your configuration comes here
+"    -- or leave it empty to use the default settings
+"    -- refer to the configuration section below
+"  }
+"  require("null-ls").setup({
+"      sources = {
+"          require("null-ls").builtins.diagnostics.vale,
+"      },
+"  })
+"EOF
+
+if empty(glob('~/.config/coc/extensions/package.json'))
+  " solargraph = ruby
+  " pyright = python
+  silent! CocInstall coc-prettier coc-pyright coc-json coc-solargraph coc-html coc-css
+endif
+
+" Formats files on save
+" NOTE: use ~/.config/nvim/coc-settings.json
+" augroup prettier
+"   autocmd!
+"   autocmd BufWritePre *.json,*.js,*.jsx,*.ts,*.tsx,*.css,*.html,*.rb,*.py silent! CocCommand prettier.formatFile
+" augroup END
+
+" vim-go settings
+" let g:go_fmt_command = "goimports"  " Use goimports for formatting
+autocmd BufWritePre *.go :silent! :GoFmt  " Format on save
+
+" Lint on save
+" autocmd BufWritePost *.go :GoMetaLinter
+
+" Lints and potentially fixes SCSS and CSS files on file open and save
+augroup stylelint
+  autocmd!
+  autocmd BufRead,BufWritePre *.scss,*.css silent! CocCommand stylelint.executeAutofix
+augroup END
+
+" Lints and potentially fixes JavaScript and TypeScript files on file open and save
+augroup eslint
+  autocmd!
+  autocmd BufRead,BufWritePre *.js,*.cjs,*.mjs,*.ts silent! CocCommand eslint.executeAutofix
+augroup END
