@@ -351,3 +351,8 @@ augroup eslint
   autocmd!
   autocmd BufRead,BufWritePre *.js,*.cjs,*.mjs,*.ts silent! CocCommand eslint.executeAutofix
 augroup END
+
+" Load custom plugins
+for f in glob('~/.vim/plugin/*.vim', 0, 1)
+ execute 'source' f
+endfor

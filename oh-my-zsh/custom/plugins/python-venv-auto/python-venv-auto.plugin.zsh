@@ -1,5 +1,7 @@
 # Plugin name: python-venv-auto
 # Automatically activates/deactivates Python virtual environments when entering/leaving directories
+#
+# TODO: whitelist venv directories
 
 autoload -U add-zsh-hook
 
