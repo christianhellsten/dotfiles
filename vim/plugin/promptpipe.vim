@@ -47,7 +47,7 @@ function! s:GetBufferXML()
   return join(xml, "\n")
 endfunction
 
-function! s:CheckAIPrompt(prompt)
+function! s:RunPrompt(prompt)
   let template = s:ReadPromptTemplate(a:prompt)
   let final_prompt = empty(template) ? a:prompt : template
   let @+ = final_prompt . "\n\n" . s:GetBufferXML()
@@ -71,9 +71,12 @@ function! s:GetPromptFiles(ArgLead, CmdLine, CursorPos)
   return matches
 endfunction
 
-execute 'command! -nargs=+ -complete=customlist,<SID>GetPromptFiles ' . g:promptpipe_cmd . ' call <SID>CheckAIPrompt(<q-args>)'
+execute 'command! -nargs=+ -complete=customlist,<SID>GetPromptFiles ' . g:promptpipe_cmd . ' call <SID>RunPrompt(<q-args>)'
 
-augroup AIPrompt
+augroup PromptPipe
   autocmd!
   autocmd InsertLeave * if getline('.') =~? '\v^/' . g:promptpipe_cmd . '\s+' | execute g:promptpipe_cmd . ' ' . substitute(getline('.'), '\v^/' . g:promptpipe_cmd . '\s+', '', '') | endif
 augroup END
+
+" leader+p start prompt completion
+nnoremap <leader>p :<C-u>Prompt<space>
