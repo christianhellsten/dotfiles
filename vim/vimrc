@@ -29,6 +29,8 @@ set nocompatible
 set nu
 " no new line at end-of-file!
 set noeol
+" show the annoying non-breaking space as a dot on MacOS
+set listchars=nbsp:•
 
 " Force vim to use python3
 if has('python3')
@@ -69,12 +71,12 @@ call plug#begin('~/.vim/plugged')
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'  " fzf, ripgrep, and ag integration
 nnoremap <c-p> :Files<cr>
-Plug 'janko-m/vim-test' " Run your tests at the speed of thought
+" Plug 'janko-m/vim-test' " Run your tests at the speed of thought
 nnoremap t<c-n> :TestNearest<cr>
 nnoremap t<c-l> :TestLast<cr>
 nnoremap t<c-f> :TestFile<cr>
 
-Plug 'joshuavial/aider.nvim' " AI coding assistant
+" Plug 'joshuavial/aider.nvim' " AI coding assistant
 Plug 'tpope/vim-sensible' " Sensible defaults for Vim
 Plug 'nvim-lua/plenary.nvim' " All the lua functions I don't want to write twice
 Plug 'folke/trouble.nvim' " Show me troubles
@@ -87,10 +89,12 @@ Plug 'lsdr/monokai' " Sublimetext's theme
 Plug 'vim-airline/vim-airline' " Status bar
 Plug 'vim-airline/vim-airline-themes' " Status and tab styling
 Plug 'neoclide/coc.nvim', {'branch': 'release'} " Make your Vim/Neovim as smart as VSCode
-Plug 'neoclide/coc-java'
+Plug '/Users/christian/projects/aktagon/promptagent'
+
+" Plug 'neoclide/coc-java'
 Plug 'fatih/vim-go' " Go syntax
 Plug 'tpope/vim-endwise' " Add 'end' automatically to Ruby code
-Plug 'ggml-org/llama.vim'
+" Plug 'ggml-org/llama.vim'
 
 " Disabled plugins
 " Plug 'mileszs/ack.vim' " ag, ripgrep integration no good
@@ -150,16 +154,16 @@ set undolevels=1000  " number of changes that can be undone
 set undoreload=10000 " number of lines to save
 
 " Highlight search results
-highlight OverLength ctermbg=red ctermfg=white guibg=#592929
-match OverLength /\%81v.\+/
+" highlight OverLength ctermbg=red ctermfg=white guibg=#592929
+" match OverLength /\%81v.\+/
 
 " Configure ctrl-p
-set wildignore+=*/deps/*,*/priv/*,*/tmp/*,*.so,*.swp,*.zip,*/log/*,*/vendor/bundle/*,*/node_modules/*,*/bower_components/*,*/build/*,*/tmp/*,*/doc/*,*/target/*
+" set wildignore+=*/deps/*,*/priv/*,*/tmp/*,*.so,*.swp,*.zip,*/log/*,*/vendor/bundle/*,*/node_modules/*,*/bower_components/*,*/build/*,*/tmp/*,*/doc/*,*/target/*
 "let g:ctrlp_working_path_mode = 0
 "let g:ctrlp_max_height = 30
 
 " Remove ugly buffer divider
-:set fillchars+=vert:\
+set fillchars+=vert:\
 
 " Highlight search matches
 set hlsearch
@@ -320,6 +324,7 @@ let g:chat_gpt_split_direction = 'vertical'
 "  })
 "EOF
 
+" Install Coc extensions
 if empty(glob('~/.config/coc/extensions/package.json'))
   " solargraph = ruby
   " pyright = python
@@ -368,3 +373,21 @@ fun! s:MkNonExDir(file, buf)
     call mkdir(fnamemodify(a:file, ':h'), 'p')
   endif
 endfun
+
+nnoremap <silent> K :call ShowDocumentation()<CR>
+
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  else
+    call feedkeys('K', 'in')
+  endif
+endfunction
+
+
+lua << EOF
+require('codeagent').setup({
+  cli_command = "llm",
+  model = "gpt-4o-mini" -- or other models supported by llm (try 'llm models' to see available models)
+})
+EOF
